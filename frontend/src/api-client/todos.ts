@@ -3,19 +3,16 @@ import { apiDelete, apiGet, apiPatch, apiPost } from './base';
 export type Todo = {
   id: number;
   title: string;
-  description: string | null;
   completed: boolean;
 };
 
 export type TodoCreate = {
   title: string;
-  description: string | null;
 };
 
 export type TodoUpdate = {
-  title?: string | null;
-  description?: string | null;
-  completed?: boolean | null;
+  title: string;
+  completed: boolean;
 };
 
 export function fetchTodos(): Promise<Todo[]> {

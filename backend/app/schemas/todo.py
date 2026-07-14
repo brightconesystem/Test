@@ -1,22 +1,23 @@
-from pydantic import BaseModel, ConfigDict, field_validator
+from pydantic import BaseModel, field_validator
 
 
-class TodoCreate(BaseModel):
+class TodoBase(BaseModel):
     title: str
-    description: str | None = None
 
     @field_validator("title")
     @classmethod
     def validate_title(cls, value: str) -> str:
-        cleaned = value.strip()
-        if not cleaned:
+        if not value or not value.strip():
             raise ValueError("title must not be blank")
-        return cleaned
+        return value.strip()
 
 
-class TodoPatch(BaseModel):
+class TodoCreate(TodoBase):
+    pass
+
+
+class TodoUpdate(BaseModel):
     title: str | None = None
-    description: str | None = None
     completed: bool | None = None
 
     @field_validator("title")
@@ -24,16 +25,14 @@ class TodoPatch(BaseModel):
     def validate_title(cls, value: str | None) -> str | None:
         if value is None:
             return value
-        cleaned = value.strip()
-        if not cleaned:
+        if not value.strip():
             raise ValueError("title must not be blank")
-        return cleaned
+        return value.strip()
 
 
 class TodoOut(BaseModel):
     id: int
     title: str
-    description: str | None
     completed: bool
 
-    model_config = ConfigDict(from_attributes=True)
+    model_config = {"from_attributes": True}

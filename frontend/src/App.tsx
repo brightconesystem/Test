@@ -17,7 +17,6 @@ export default function App() {
   const [listError, setListError] = useState<string | null>(null);
   const [createError, setCreateError] = useState<string | null>(null);
   const [createTitle, setCreateTitle] = useState('');
-  const [createDescription, setCreateDescription] = useState('');
   const [isCreating, setIsCreating] = useState(false);
   const [updatingIds, setUpdatingIds] = useState<number[]>([]);
   const [deletingIds, setDeletingIds] = useState<number[]>([]);
@@ -54,20 +53,16 @@ export default function App() {
       setCreateError(null);
 
       try {
-        const created = await createTodo({
-          title: trimmedTitle,
-          description: createDescription.trim() ? createDescription.trim() : null,
-        });
+        const created = await createTodo({ title: trimmedTitle });
         setTodos((current) => [...current, created]);
         setCreateTitle('');
-        setCreateDescription('');
       } catch (error) {
         setCreateError(error instanceof Error ? error.message : 'Unable to create todo.');
       } finally {
         setIsCreating(false);
       }
     },
-    [createDescription, createTitle],
+    [createTitle],
   );
 
   const handleToggle = useCallback(async (todo: Todo) => {
@@ -76,8 +71,7 @@ export default function App() {
 
     try {
       const updated = await updateTodo(todo.id, {
-        title: null,
-        description: null,
+        title: todo.title,
         completed: !todo.completed,
       });
       setTodos((current) => current.map((item) => (item.id === todo.id ? updated : item)));
@@ -115,12 +109,10 @@ export default function App() {
         listError={listError}
         createError={createError}
         createTitle={createTitle}
-        createDescription={createDescription}
         isCreating={isCreating}
         updatingIds={updatingIds}
         deletingIds={deletingIds}
         onCreateTitleChange={setCreateTitle}
-        onCreateDescriptionChange={setCreateDescription}
         onCreate={handleCreate}
         onRetry={loadTodos}
         onToggle={handleToggle}

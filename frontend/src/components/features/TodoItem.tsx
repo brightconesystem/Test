@@ -29,11 +29,6 @@ export function TodoItem({ todo, onToggle, onDelete, isUpdating, isDeleting }: T
           <p className={cn('truncate text-sm font-medium sm:text-base', todo.completed && 'text-muted-foreground line-through')}>
             {todo.title}
           </p>
-          {todo.description ? (
-            <p className={cn('mt-1 line-clamp-2 text-xs text-muted-foreground sm:text-sm', todo.completed && 'line-through')}>
-              {todo.description}
-            </p>
-          ) : null}
           <p className="mt-1 text-xs text-muted-foreground">
             {todo.completed ? 'Completed and synced with the API' : 'Open and ready for action'}
           </p>

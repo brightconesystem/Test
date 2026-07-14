@@ -10,12 +10,10 @@ interface TodoDashboardPageProps {
   listError: string | null;
   createError: string | null;
   createTitle: string;
-  createDescription: string;
   isCreating: boolean;
   updatingIds: number[];
   deletingIds: number[];
   onCreateTitleChange: (value: string) => void;
-  onCreateDescriptionChange: (value: string) => void;
   onCreate: (event: React.FormEvent<HTMLFormElement>) => void;
   onRetry: () => void;
   onToggle: (todo: Todo) => void;
@@ -28,12 +26,10 @@ export function TodoDashboardPage({
   listError,
   createError,
   createTitle,
-  createDescription,
   isCreating,
   updatingIds,
   deletingIds,
   onCreateTitleChange,
-  onCreateDescriptionChange,
   onCreate,
   onRetry,
   onToggle,
@@ -80,9 +76,7 @@ export function TodoDashboardPage({
         </Card>
         <TodoComposer
           title={createTitle}
-          description={createDescription}
           onTitleChange={onCreateTitleChange}
-          onDescriptionChange={onCreateDescriptionChange}
           onSubmit={onCreate}
           isSubmitting={isCreating}
           errorMessage={createError}

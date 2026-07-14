@@ -2,13 +2,10 @@ import { Plus } from 'lucide-react';
 import { Button } from '../ui/Button';
 import { Card } from '../ui/Card';
 import { Input } from '../ui/Input';
-import { Textarea } from '../ui/Textarea';
 
 interface TodoComposerProps {
   title: string;
-  description: string;
   onTitleChange: (value: string) => void;
-  onDescriptionChange: (value: string) => void;
   onSubmit: (event: React.FormEvent<HTMLFormElement>) => void;
   isSubmitting: boolean;
   errorMessage: string | null;
@@ -16,9 +13,7 @@ interface TodoComposerProps {
 
 export function TodoComposer({
   title,
-  description,
   onTitleChange,
-  onDescriptionChange,
   onSubmit,
   isSubmitting,
   errorMessage,
@@ -47,25 +42,12 @@ export function TodoComposer({
           aria-describedby={errorMessage ? 'todo-form-error' : undefined}
           disabled={isSubmitting}
         />
-        <div className="space-y-2">
-          <label htmlFor="todo-description" className="text-sm font-medium text-foreground">
-            Description <span className="text-muted-foreground">(optional)</span>
-          </label>
-          <Textarea
-            id="todo-description"
-            value={description}
-            onChange={(event) => onDescriptionChange(event.target.value)}
-            placeholder="Add any details you want to remember"
-            aria-describedby={errorMessage ? 'todo-form-error' : 'todo-form-hint'}
-            disabled={isSubmitting}
-          />
-        </div>
         {errorMessage ? (
           <p id="todo-form-error" className="text-sm text-destructive">
             {errorMessage}
           </p>
         ) : (
-          <p id="todo-form-hint" className="text-sm text-muted-foreground">Todos are saved immediately to the API-backed shared list.</p>
+          <p className="text-sm text-muted-foreground">Todos are saved immediately to the API-backed shared list.</p>
         )}
         <Button type="submit" className="w-full sm:w-auto" disabled={isSubmitting || title.trim().length === 0} aria-disabled={isSubmitting || title.trim().length === 0}>
           <Plus className="h-4 w-4" />
