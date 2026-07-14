@@ -8,13 +8,13 @@ from app.routers import todos_router
 
 # API CONTRACT
 # GET  /api/todos
-#   response: [{"id": number, "title": string, "description": string | null, "completed": boolean}, ...]
+#   response: [ {"id": number, "title": string, "completed": boolean}, ... ]
 # POST /api/todos
-#   request:  {"title": string, "description": string | null}
-#   response: {"id": number, "title": string, "description": string | null, "completed": boolean}
+#   request:  {"title": string}
+#   response: {"id": number, "title": string, "completed": boolean}
 # PATCH /api/todos/{id}
-#   request:  {"title": string | null, "description": string | null, "completed": boolean | null}
-#   response: {"id": number, "title": string, "description": string | null, "completed": boolean}
+#   request:  {"title"?: string, "completed"?: boolean}
+#   response: {"id": number, "title": string, "completed": boolean}
 # DELETE /api/todos/{id}
 #   response: 204 No Content
 
