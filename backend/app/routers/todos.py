@@ -1,12 +1,12 @@
 # API CONTRACT
 # GET  /api/todos
-#   response: [ {"id": number, "title": string, "completed": boolean}, ... ]
+#   response: [{"id": number, "title": string, "description": string | null, "completed": boolean}, ...]
 # POST /api/todos
-#   request:  {"title": string}
-#   response: {"id": number, "title": string, "completed": boolean}
+#   request:  {"title": string, "description": string | null}
+#   response: {"id": number, "title": string, "description": string | null, "completed": boolean}
 # PATCH /api/todos/{id}
-#   request:  {"title"?: string, "completed"?: boolean}
-#   response: {"id": number, "title": string, "completed": boolean}
+#   request:  {"title": string | null, "description": string | null, "completed": boolean | null}
+#   response: {"id": number, "title": string, "description": string | null, "completed": boolean}
 # DELETE /api/todos/{id}
 #   response: 204 No Content
 
@@ -15,7 +15,7 @@ from sqlalchemy.orm import Session
 
 from app.database import get_db
 from app.models.todo import Todo
-from app.schemas.todo import TodoCreate, TodoOut, TodoUpdate
+from app.schemas.todo import TodoCreate, TodoOut, TodoPatch
 
 router = APIRouter(prefix="/api/todos", tags=["todos"])
 
@@ -27,25 +27,23 @@ async def list_todos(db: Session = Depends(get_db)) -> list[Todo]:
 
 @router.post("", response_model=TodoOut, status_code=status.HTTP_201_CREATED)
 async def create_todo(body: TodoCreate, db: Session = Depends(get_db)) -> Todo:
-    todo = Todo(title=body.title, completed=False)
+    todo = Todo(title=body.title, description=body.description, completed=False)
     db.add(todo)
     db.flush()
     return todo
 
 
 @router.patch("/{todo_id}", response_model=TodoOut)
-async def update_todo(todo_id: int = Path(..., ge=1), body: TodoUpdate | TodoCreate = None, db: Session = Depends(get_db)) -> Todo:
+async def update_todo(todo_id: int = Path(..., ge=1), body: TodoPatch = None, db: Session = Depends(get_db)) -> Todo:
     todo = db.get(Todo, todo_id)
     if todo is None:
         raise HTTPException(status_code=404, detail={"error": "todo not found"})
-    if isinstance(body, TodoCreate):
-        update_data = body.model_dump()
-    else:
-        update_data = body.model_dump(exclude_unset=True) if body is not None else {}
-    if "title" in update_data:
-        todo.title = update_data["title"]
-    if "completed" in update_data:
-        todo.completed = update_data["completed"]
+    if body.title is not None:
+        todo.title = body.title
+    if body.description is not None:
+        todo.description = body.description
+    if body.completed is not None:
+        todo.completed = body.completed
     return todo
 
 
