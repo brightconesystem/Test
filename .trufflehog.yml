@@ -1,0 +1,4 @@
+exclusions:
+  files:
+    - "frontend/package-lock.json"
+    - "backend/.env.example"

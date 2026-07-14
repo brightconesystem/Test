@@ -1,0 +1,16 @@
+{
+  "entries": [
+    {
+      "role": "frontend",
+      "type": "react-vite",
+      "root": "frontend",
+      "manifest": "frontend/package.json"
+    },
+    {
+      "role": "backend",
+      "type": "fastapi",
+      "root": "backend",
+      "manifest": "backend/requirements.txt"
+    }
+  ]
+}
